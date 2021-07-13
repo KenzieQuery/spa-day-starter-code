@@ -9,14 +9,14 @@ import java.util.ArrayList;
 @Controller
 public class SpaDayController {
 
-    public boolean checkSkinType(String skinType, String facialType) {
-        if (skinType.equals("oily")) {
+    public boolean checkSkinType(String skintype, String facialType) {
+        if (skintype.equals("oily")) {
             return facialType.equals("Microdermabrasion") || facialType.equals("Rejuvenating");
         }
-        else if (skinType.equals("combination")) {
+        else if (skintype.equals("combination")) {
             return facialType.equals("Microdermabrasion") || facialType.equals("Rejuvenating") || facialType.equals("Enzyme Peel");
         }
-        else if (skinType.equals("dry")) {
+        else if (skintype.equals("dry")) {
             return facialType.equals("Rejuvenating") || facialType.equals("Hydrofacial");
         }
         else {
@@ -41,6 +41,7 @@ public class SpaDayController {
                 "<select name = 'manipedi'>" +
                 "<option value = 'manicure'>Manicure</option>" +
                 "<option value = 'pedicure'>Pedicure</option>" +
+                "<option value = 'both'>both</option>" +
                 "</select><br>" +
                 "<input type = 'submit' value = 'Submit'>" +
                 "</form>";
@@ -48,6 +49,7 @@ public class SpaDayController {
     }
 
     @PostMapping(value="")
+    //Model is specific to Spring Boot and has unique features. Model passed as a parameter allows data to pass to html page.
     public String spaMenu(@RequestParam String name, @RequestParam String skintype, @RequestParam String manipedi, Model model) {
 
         ArrayList<String> facials = new ArrayList<>();
@@ -62,6 +64,12 @@ public class SpaDayController {
                 appropriateFacials.add(facials.get(i));
             }
         }
+
+        // model.addAttribute("variableName", variableValue)
+        model.addAttribute("name", name);
+        model.addAttribute("skintype", skintype);
+        model.addAttribute("manipedi", manipedi);
+        model.addAttribute("appropriateFacials", appropriateFacials);
 
         return "menu";
     }
